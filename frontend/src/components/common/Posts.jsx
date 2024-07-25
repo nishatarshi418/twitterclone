@@ -1,4 +1,3 @@
-
 import Post from "./Post";
 import PostSkeleton from "../skeletons/PostSkeleton";
 import { useQuery } from "@tanstack/react-query";

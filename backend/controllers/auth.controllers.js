@@ -3,29 +3,31 @@ import bcrypt from "bcryptjs";
 import { generateTokenAndSetCookies } from "../lib/utils/generateToken.js";
 
 
-export const signup = async(res,req) =>{
+export const signup = async(req,res) =>{
 
     try {
         const {fullName,username,email,password} = req.body;
+
+        
 
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if(!emailRegex.test(email)){
             return res.status(400).json({error:"Invalid user format"});
         }
 
-        const existingUser = await UserActivation.findOne({username});
+        const existingUser = await User.findOne({username});
         if(existingUser){
             return res.status(400).json({error:"Username is already taken"});
 
         }
 
-        const existingEmail = await UserActivation.findOne({email});
+        const existingEmail = await User.findOne({email});
         if(existingEmail){
             return res.status(400).json({error:"Email is already taken"});
 
         }
 
-        if(existingEmail.length < 6){
+        if(password.length < 6){
             return res.status(400).json({error:"password must be atleast 6 characters long"});
         }
 
@@ -45,7 +47,7 @@ export const signup = async(res,req) =>{
 
             res.status(201).json({
                 _id:newUser._id,
-                fullNmae:newUser.username,
+                username:newUser.username,
                 email:newUser.email,
                 fullName:newUser.fullName,
                 profileImg:newUser.profileImg,
@@ -66,7 +68,7 @@ export const signup = async(res,req) =>{
        
 };
 
-export const login = async(res,req) =>{
+export const login = async(req,res) =>{
     
     try {
         const {username,password} = req.body;
@@ -97,7 +99,7 @@ export const login = async(res,req) =>{
     }
 };
 
-export const logout = async(res,req) =>{
+export const logout = async(req,res) =>{
     
    try {
     res.cookie("jwt","",{maxAge:0})

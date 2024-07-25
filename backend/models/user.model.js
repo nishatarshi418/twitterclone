@@ -27,7 +27,7 @@ import mongoose from "mongoose";
         unique:true,
         trim:true
     },
-    fullnName:{
+    fullName:{
         type:String,
         required:true,
     },
